@@ -1,0 +1,11 @@
+.personal-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-avatar:hover {
+    cursor: pointer;
+    filter: brightness(80%);
+}

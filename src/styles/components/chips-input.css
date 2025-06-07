@@ -1,0 +1,8 @@
+.chips-input__input {
+    margin-bottom: 10px;
+}
+
+.chips-input__chips {
+    display: flex;
+    gap: 10px;
+}

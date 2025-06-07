@@ -1,0 +1,110 @@
+.home-page-content {
+    padding: 15px;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.select-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-height: 110px;
+    overflow-y: auto;
+}
+
+.select-content::-webkit-scrollbar {
+    display: none;
+}
+
+.search-result-container {
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: space-between;
+    width: max-content;
+}
+
+.selected-fundraising-container {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.hero-section > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-section h2,
+.hero-section h5,
+.hero-section button {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.hero-section h5 {
+    animation-delay: 0.2s;
+}
+
+.hero-section button {
+    animation-delay: 0.4s;
+}
+
+/* Hover effects for feature cards */
+.MuiGrid-item .MuiBox-root {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* height: 100%; */
+}
+
+.MuiGrid-item .MuiBox-root:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--mui-shadows-4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .hero-section {
+        padding: 40px 0 !important;
+    }
+
+    .hero-section h2 {
+        font-size: 2rem !important;
+    }
+
+    .hero-section h5 {
+        font-size: 1.2rem !important;
+    }
+}
