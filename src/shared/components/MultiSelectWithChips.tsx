@@ -20,7 +20,7 @@ const MultiSelectWithChip = (props: {
 
     const handleChange = (event: React.SyntheticEvent, value: string[]) => {
         if (value.length > (props.limitTags || 5)) {
-            showError('You can select up to 5 tags');
+            showError('You can select up to ' + (props.limitTags || 5) + ' tags');
             return;
         }
         props.onChange(value);
@@ -87,7 +87,7 @@ const MultiSelectWithChip = (props: {
                             py: 1,
                             px: 2,
                             '&[aria-selected="true"]': {
-                                backgroundColor: theme.palette.primary.light,
+                                backgroundColor: theme.palette.primary.main,
                             },
                             '&[aria-selected="true"].Mui-focused': {
                                 backgroundColor: theme.palette.primary.light,

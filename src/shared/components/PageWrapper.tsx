@@ -49,8 +49,6 @@ const PageWrapper = ({ children, searchAvailable = true, showBackButton = false 
         window.history.back();
     };
 
-    console.log(complaintsCount);
-
     return (
         <Box className='page-wrapper'>
             <Box

@@ -1,15 +1,15 @@
-import { Box, TextField, Button, useTheme } from "@mui/material";
+import { Box, TextField, Button } from "@mui/material";
 import AuthGoogleButton from './SignInGoogle';
 import { useZodForm } from "../../../shared/hooks/useZodForm";
 import { SignUpFormData, signUpSchema, transformSignUpData } from "../schemas/signUpSchema";
 import PasswordInput from "../../../shared/components/PasswordInput";
 
 interface SignUpFormProps {
-    onSubmit: (data: ReturnType<typeof transformSignUpData>) => void;
+    onSubmit: (data: ReturnType<typeof transformSignUpData>, redirect: string | null) => void;
+    redirect: string | null;
 }
 
 const SignUpForm = (props: SignUpFormProps) => {
-    const theme = useTheme();
     const {
         register,
         handleSubmit,
@@ -17,7 +17,7 @@ const SignUpForm = (props: SignUpFormProps) => {
     } = useZodForm(signUpSchema);
 
     const handleFormSubmit = (data: SignUpFormData) => {
-        props.onSubmit(transformSignUpData(data));
+        props.onSubmit(transformSignUpData(data), props.redirect);
     };
 
     return (

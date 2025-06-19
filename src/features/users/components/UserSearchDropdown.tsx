@@ -40,10 +40,10 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({
     const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
 
     const performSearch = async (query: string) => {
-        if (!query.trim()) {
-            setOptions([]);
-            return;
-        }
+        // if (!query.trim()) {
+        //     setOptions([]);
+        //     return;
+        // }
 
         try {
             setLoading(true);
@@ -71,15 +71,15 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({
         }
 
         // Only search if there's input text
-        if (value.trim()) {
-            // Debounce search for 300ms
-            const timeout = setTimeout(() => {
-                performSearch(value);
-            }, 300);
-            setSearchTimeout(timeout);
-        } else {
-            setOptions([]);
-        }
+        // if (value.trim()) {
+        // Debounce search for 300ms
+        const timeout = setTimeout(() => {
+            performSearch(value);
+        }, 300);
+        setSearchTimeout(timeout);
+        // } else {
+        //     setOptions([]);
+        // }
     };
 
     const handleOpen = () => {
@@ -98,6 +98,8 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({
 
     // Cleanup timeout on unmount
     useEffect(() => {
+        performSearch(inputValue);
+
         return () => {
             if (searchTimeout) {
                 clearTimeout(searchTimeout);
@@ -122,9 +124,10 @@ const UserSearchDropdown: React.FC<UserSearchDropdownProps> = ({
             isOptionEqualToValue={(option, value) => option.id === value.id}
             getOptionLabel={(option) => option.name || ''}
             noOptionsText={
-                inputValue.trim() ?
-                    (loading ? "Searching..." : "No users found") :
-                    "Type to search users"
+                // inputValue.trim() ?
+                //     (loading ? "Searching..." : "No users found") :
+                //     "Type to search users"
+                "No users found"
             }
             loadingText="Searching users..."
             renderOption={(props, option) => (

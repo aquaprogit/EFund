@@ -18,6 +18,7 @@ const AuthGoogleButton = (props: { label: string, type: 'sign-in' | 'sign-up' })
             await googleSignIn(code);
             const user = await refreshUser();
             if (user) {
+                console.log('user', user);
                 navigate('/');
             } else {
                 showError('Error during Google authentication');

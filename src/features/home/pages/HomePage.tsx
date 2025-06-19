@@ -35,7 +35,7 @@ const HomePage = () => {
                     <Button
                         variant="contained"
                         size="large"
-                        onClick={() => { isAuth ? navigate('/add-fundraising') : navigate('/sign-in') }}
+                        onClick={() => { isAuth ? navigate('/add-fundraising') : navigate('/sign-in?redirect=/add-fundraising') }}
                         sx={{
                             backgroundColor: theme.palette.common.white,
                             color: theme.palette.primary.main,
@@ -144,7 +144,7 @@ const HomePage = () => {
                         <Button
                             variant="contained"
                             size="large"
-                            onClick={() => navigate('/sign-up')}
+                            onClick={() => { isAuth ? navigate('/add-fundraising') : navigate('/sign-in?redirect=/add-fundraising') }}
                             color="primary"
                         >
                             Create Project

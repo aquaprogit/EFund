@@ -7,10 +7,14 @@ import axios from './axios';
 export const api = {
     get: async <TResponse>(url: string, params?: any): Promise<ApiResponse<TResponse>> => {
         try {
+            const filteredParams = Object.fromEntries(
+                Object.entries(params || {}).filter(([_, value]) => value !== undefined && value !== '')
+            );
+
             const response = await axios.get<TResponse>(url,
                 {
                     params: {
-                        ...params,
+                        ...filteredParams,
                     }
                 });
 

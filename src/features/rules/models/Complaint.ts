@@ -9,8 +9,8 @@ export interface Complaint {
     requestedAt: string;
     reviewedAt?: string;
     fundraisingId: string;
-    requestedBy: string;
-    requestedByUserName: string;
+    requestedBy: string | null;
+    requestedByUserName: string | null;
     requestedFor: string;
     requestedForUserName: string;
     reviewedBy?: string;

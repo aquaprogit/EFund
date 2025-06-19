@@ -136,9 +136,13 @@ const ComplaintCard = ({ complaint, key }: ComplaintCardProps) => {
                                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                                     By:
                                 </Typography>
-                                <UserPreviewTooltip userId={complaint.requestedBy}>
-                                    <Typography sx={{ textDecoration: 'underline' }} color="text.secondary" onClick={() => navigate(`/user/${complaint.requestedBy}`)} variant="body2">{complaint.requestedByUserName}</Typography>
-                                </UserPreviewTooltip>
+                                {!!complaint.requestedBy ? (
+                                    <UserPreviewTooltip userId={complaint.requestedBy}>
+                                        <Typography sx={{ textDecoration: 'underline' }} color="text.secondary" onClick={() => navigate(`/user/${complaint.requestedBy}`)} variant="body2">{complaint.requestedByUserName}</Typography>
+                                    </UserPreviewTooltip>
+                                ) : (
+                                    <Typography variant="body2" color="text.secondary">Anonymous</Typography>
+                                )}
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                 <PersonIcon sx={{ fontSize: 16, color: 'text.secondary' }} />

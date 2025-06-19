@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useUser } from '../../../contexts/UserContext';
+import { ApiResponse } from '../../../shared/models/api/pagination/ApiResponse';
+import { PagedResponse } from '../../../shared/models/api/pagination/PagedResponse';
 import { Tag } from '../../tags/models/Tag';
 import { UserDetails } from '../../users/models/UserDetails';
 import Fundraising from '../models/Fundraising';
@@ -54,7 +57,7 @@ export const useFundraisingSearch = ({
     pageSize = 6,
     initialSearchQuery = '',
     userId,
-    defaultStatuses = [1]
+    defaultStatuses = []
 }: UseFundraisingSearchProps = {}): UseFundraisingSearchResult => {
 
     // Separated concerns
@@ -67,6 +70,7 @@ export const useFundraisingSearch = ({
     const pagination = usePagination({ pageSize });
     const tags = useTags();
     const users = useUsers({ initialUserId: userId });
+    const user = useUser();
 
     // Main data state
     const [fundraisings, setFundraisings] = useState<Fundraising[]>([]);
@@ -78,27 +82,45 @@ export const useFundraisingSearch = ({
         try {
             const internalStatuses = filters.selectedStatuses.map(status => MapFromPublicStatus(status)).flat();
 
-            const response = await fundraisingsRepository.getFundraisings(
-                {
-                    title: filters.searchQuery,
-                    tags: filters.selectedTags,
-                    statuses: internalStatuses,
-                    userId: filters.selectedUser ?? undefined
-                },
-                pagination.page,
-                pagination.pageSize
-            );
 
-            if (response?.data) {
-                setFundraisings(response.data.items);
-                pagination.updatePaginationData(
-                    response.data.totalPages,
-                    response.data.totalCount
+            let response: ApiResponse<PagedResponse<Fundraising>> | undefined;
+
+            console.log(userId, user?.user?.id);
+
+            if (userId === user?.user?.id) {
+                response = await fundraisingsRepository.getMyFundraising(
+                    pagination.page,
+                    pagination.pageSize
                 );
+            } else {
+                response = await fundraisingsRepository.getFundraisings(
+                    {
+                        title: filters.searchQuery,
+                        tags: filters.selectedTags,
+                        statuses: internalStatuses,
+                        userId: filters.selectedUser ?? undefined
+                    },
+                    pagination.page,
+                    pagination.pageSize
+                );
+            }
+
+            if (response) {
+                if (response?.data) {
+                    setFundraisings(response.data.items);
+                    pagination.updatePaginationData(
+                        response.data.totalPages,
+                        response.data.totalCount
+                    );
+                } else {
+                    setFundraisings([]);
+                    pagination.resetPagination();
+                }
             } else {
                 setFundraisings([]);
                 pagination.resetPagination();
             }
+
         } catch (error) {
             console.error('Failed to fetch fundraisings:', error);
             setFundraisings([]);

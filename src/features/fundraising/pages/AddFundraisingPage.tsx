@@ -29,8 +29,6 @@ import { Tag } from "../../tags/models/Tag";
 import { AddFundraisingForm } from "../components/AddFundraisingForm";
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import SaveIcon from '@mui/icons-material/Save';
 import { Link as RouterLink } from "react-router-dom";
@@ -97,12 +95,16 @@ const AddFundraisingPage = () => {
                 throw new Error(response.error.message);
             }
 
+            if (!response.data) {
+                throw new Error('Failed to create fundraising');
+            }
+
             if (imageFile && response.data) {
                 await uploadImage(response.data.id, imageFile);
             }
 
             showSuccess('Fundraising has been successfully created');
-            navigate('/');
+            navigate('/fundraising/' + response.data.id, { replace: true });
         } catch (e) {
             showError(e instanceof Error ? e.message : 'Failed to create fundraising');
         } finally {
@@ -309,30 +311,6 @@ const AddFundraisingPage = () => {
                                             • Share regular updates to build trust with supporters
                                         </Typography>
                                     </Stack>
-                                </CardContent>
-                            </Card>
-
-                            {/* Quick Help */}
-                            <Card elevation={3} sx={{ borderRadius: 3 }}>
-                                <CardContent sx={{ p: 3 }}>
-                                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                                        Need Help?
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                                        Creating your first fundraising campaign? Check out our guide for best practices and tips.
-                                    </Typography>
-                                    <Button
-                                        variant="outlined"
-                                        size="small"
-                                        fullWidth
-                                        sx={{
-                                            borderRadius: 2,
-                                            textTransform: 'none',
-                                            fontWeight: 600
-                                        }}
-                                    >
-                                        View Guide
-                                    </Button>
                                 </CardContent>
                             </Card>
                         </Stack>

@@ -16,6 +16,7 @@ const SignUpPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const adminToken = queryParams.get('adminToken') ?? undefined;
+    const redirect = queryParams.get('redirect') ?? null;
 
     const { refreshUser } = useUser();
     const { signUp, confirmEmail } = useAuth();
@@ -32,7 +33,7 @@ const SignUpPage = () => {
         }
     }
 
-    const handleConfirmEmail = async (code: string) => {
+    const handleConfirmEmail = async (code: string, redirect: string | null) => {
         if (!userId)
             return;
 
@@ -40,7 +41,11 @@ const SignUpPage = () => {
         if (success) {
             const user = await refreshUser();
             if (user) {
-                navigate('/');
+                if (redirect) {
+                    navigate(redirect);
+                } else {
+                    navigate('/');
+                }
             } else {
                 showError(error ?? "Error during signing in");
             }
@@ -103,9 +108,9 @@ const SignUpPage = () => {
 
                     <Box sx={{ mb: { xs: 4, sm: 5 } }}>
                         {!userId ? (
-                            <SignUpForm onSubmit={handleSignUp} />
+                            <SignUpForm onSubmit={handleSignUp} redirect={redirect} />
                         ) : (
-                            <EmailConfirmForm onSubmit={handleConfirmEmail} />
+                            <EmailConfirmForm onSubmit={(code) => handleConfirmEmail(code, redirect)} />
                         )}
                     </Box>
                     <Stepper

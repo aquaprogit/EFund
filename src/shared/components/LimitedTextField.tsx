@@ -31,6 +31,9 @@ const LimitedTextField = (props: LimitedTextFieldProps) => {
                 alignItems: 'flex-end',
                 gap: '10px',
                 width: '100%',
+                '&:hover': {
+                    transform: 'none !important'
+                }
             }}>
                 <TextField
                     maxRows={props.maxRows}
@@ -43,7 +46,11 @@ const LimitedTextField = (props: LimitedTextFieldProps) => {
                     onChange={(e) => handleChange(e.target.value)}
                     variant="standard"
                     size="small" />
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'space-between', width: '100%', position: 'relative' }}>
+                <Box sx={{
+                    display: 'flex', flexDirection: 'row', alignItems: 'space-between', width: '100%', position: 'relative', '&:hover': {
+                        transform: 'none !important'
+                    }
+                }}>
                     {props.error && (
                         <FormHelperText sx={{ color: 'error.main', alignSelf: 'flex-start', marginTop: '-10px' }} error>{props.helperText}</FormHelperText>
                     )}

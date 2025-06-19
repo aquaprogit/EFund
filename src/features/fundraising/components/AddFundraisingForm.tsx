@@ -204,7 +204,6 @@ export const AddFundraisingForm = ({ jars, availableTags, onSubmit, rulesAgreed 
                                 width="100%"
                                 values={availableTags}
                                 freeSolo
-                                limitTags={2}
                                 value={selectedTags}
                                 onChange={(newTags) => setValue('tags', newTags)}
                             />

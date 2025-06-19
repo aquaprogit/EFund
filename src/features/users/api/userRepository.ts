@@ -80,6 +80,6 @@ export const userRepository = {
     },
 
     async getUsersMinimized(searchQuery: string): Promise<ApiResponse<UserDetails[]>> {
-        return await api.get<UserDetails[]>(urls.searchUsersMinimized, { params: { searchQuery } });
+        return await api.get<UserDetails[]>(urls.searchUsersMinimized, { searchQuery });
     }
 }; 

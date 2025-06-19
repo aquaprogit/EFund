@@ -47,7 +47,7 @@ const ComplaintDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
     const [selectedViolations, setSelectedViolations] = useState<{ [key: string]: boolean }>({});
-    const [totalPenalty, setTotalPenalty] = useState(0);
+    const [totalPenalty, setTotalPenalty] = useState(0.0);
     const [nextComplaintId, setNextComplaintId] = useState<string | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogType, setDialogType] = useState<'accept' | 'reject' | 'changes'>('accept');
@@ -131,8 +131,8 @@ const ComplaintDetailsPage = () => {
     };
 
     const handlePenaltyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = parseInt(event.target.value) || 0;
-        setTotalPenalty(Math.max(0, value));
+        const value = parseFloat(event.target.value) || 0;
+        setTotalPenalty(value);
     };
 
     const openActionDialog = (action: 'accept' | 'reject' | 'changes') => {
@@ -287,10 +287,14 @@ const ComplaintDetailsPage = () => {
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                                         <PersonIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
                                         <Typography variant="body2" color="text.secondary">Reported by:</Typography>
-                                        <UserPreviewTooltip userId={complaint.requestedBy}>
-                                            <Typography sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
-                                                color="primary" onClick={() => navigate(`/user/${complaint.requestedBy}`)} variant="body2">{complaint.requestedByUserName}</Typography>
-                                        </UserPreviewTooltip>
+                                        {!!complaint.requestedBy ? (
+                                            <UserPreviewTooltip userId={complaint.requestedBy}>
+                                                <Typography sx={{ textDecoration: 'underline', fontWeight: 'bold' }}
+                                                    color="primary" onClick={() => navigate(`/user/${complaint.requestedBy}`)} variant="body2">{complaint.requestedByUserName}</Typography>
+                                            </UserPreviewTooltip>
+                                        ) : (
+                                            <Typography variant="body2" color="text.secondary">Anonymous</Typography>
+                                        )}
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -411,7 +415,7 @@ const ComplaintDetailsPage = () => {
                                         onChange={handlePenaltyChange}
                                         fullWidth
                                         size="small"
-                                        inputProps={{ min: 0 }}
+                                        inputProps={{ min: -3, max: 0, step: 0.1 }}
                                         sx={{ mb: 2 }}
                                     />
                                     <Typography variant="caption" color="text.secondary">

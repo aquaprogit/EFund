@@ -36,12 +36,12 @@ export const FundraisingHeader = ({ fundraising }: FundraisingHeaderProps) => {
         <Box>
             {/* Status Chip */}
             <Box sx={{ mb: 2, display: 'flex', justifyContent: 'end', gap: 1 }}>
-                <FundraisingStatusChip status={MapToPublicStatus(fundraising.status)} />
                 {
                     user?.id === fundraising.userId && fundraising.status !== MapToPublicStatus(fundraising.status) && (
-                        <FundraisingStatusChip status={fundraising.status} />
+                        <FundraisingStatusChip showTooltip={true} status={fundraising.status} />
                     )
                 }
+                <FundraisingStatusChip showTooltip={true} status={MapToPublicStatus(fundraising.status)} />
             </Box>
 
             {/* Title */}

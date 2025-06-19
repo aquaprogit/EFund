@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, Divider, TextField, Typography, useTheme, DialogContent, DialogTitle } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import AuthGoogleButton from "./SignInGoogle";
 import { useZodForm } from "../../../shared/hooks/useZodForm";
 import { SignInFormData, signInSchema } from "../schemas/signInSchema";
@@ -9,7 +9,7 @@ import { useToast } from "../../../contexts/ToastContext";
 import PasswordInput from "../../../shared/components/PasswordInput";
 
 interface SignInFormProps {
-    onSubmit: (data: SignInFormData) => void;
+    onSubmit: (data: SignInFormData, redirect: string | null) => void;
 }
 
 const SignInForm = (props: SignInFormProps) => {
@@ -18,6 +18,15 @@ const SignInForm = (props: SignInFormProps) => {
     const { showSuccess, showError } = useToast();
     const [dialogOpened, setDialogOpened] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [redirect, setRedirect] = useState<string | null>(null);
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        const redirect = searchParams.get('redirect') ?? null;
+        if (redirect) {
+            setRedirect(redirect);
+        }
+    }, [searchParams]);
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -26,7 +35,7 @@ const SignInForm = (props: SignInFormProps) => {
                 flexDirection="column"
                 gap={3}
                 component="form"
-                onSubmit={handleSubmit(props.onSubmit)}
+                onSubmit={handleSubmit((data) => props.onSubmit(data, redirect))}
             >
                 <TextField
                     fullWidth
@@ -107,7 +116,7 @@ const SignInForm = (props: SignInFormProps) => {
                         }
                     }}
                     variant="text"
-                    onClick={() => navigate('/sign-up')}
+                    onClick={() => navigate('/sign-up?redirect=' + redirect)}
                 >
                     <Typography
                         variant="body2"

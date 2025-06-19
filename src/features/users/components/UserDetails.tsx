@@ -34,10 +34,12 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { fundraisingsRepository } from "../../fundraising/repository/fundraisingsRepository";
 
 export const UserDetails = ({ userId }: { userId: string }) => {
     const theme = useTheme();
     const [user, setUser] = useState<UserDetailsType | null>(null);
+    const [fundraisingsTypesCount, setFundraisingsTypesCount] = useState<{ total: number, completed: number }>({ total: 0, completed: 0 });
 
     const getBadgeColor = (badge: string) => {
         switch (badge.toLowerCase()) {
@@ -75,11 +77,25 @@ export const UserDetails = ({ userId }: { userId: string }) => {
         }
     };
 
+    const getFundraisingsTypesCount = async () => {
+        const allFundraisings = await fundraisingsRepository.getFundraisings({ userId: userId }, 1, 9999);
+
+        if (!allFundraisings?.data) {
+            return;
+        }
+
+        setFundraisingsTypesCount({
+            total: allFundraisings.data.items.length,
+            completed: allFundraisings.data.items.filter(fundraising => [1, 2, 3].includes(fundraising.status)).length
+        });
+    }
+
     useEffect(() => {
         const fetchUser = async () => {
             const response = await userRepository.getUser(userId);
             if (response.data) {
                 setUser(response.data);
+                getFundraisingsTypesCount();
             }
         }
 
@@ -292,11 +308,11 @@ export const UserDetails = ({ userId }: { userId: string }) => {
                                     <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
                                         Activity Overview
                                     </Typography>
-                                    <Grid container spacing={3}>
+                                    <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
                                         <Grid item xs={6} sm={3}>
                                             <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
                                                 <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>
-                                                    0
+                                                    {fundraisingsTypesCount.total}
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary">
                                                     Fundraisings
@@ -306,20 +322,10 @@ export const UserDetails = ({ userId }: { userId: string }) => {
                                         <Grid item xs={6} sm={3}>
                                             <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
                                                 <Typography variant="h4" sx={{ fontWeight: 700, color: 'success.main' }}>
-                                                    0
+                                                    {fundraisingsTypesCount.completed}
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary">
                                                     Completed
-                                                </Typography>
-                                            </Box>
-                                        </Grid>
-                                        <Grid item xs={6} sm={3}>
-                                            <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'background.default', borderRadius: 2 }}>
-                                                <Typography variant="h4" sx={{ fontWeight: 700, color: 'info.main' }}>
-                                                    0
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Supporters
                                                 </Typography>
                                             </Box>
                                         </Grid>

@@ -14,14 +14,18 @@ const SignInPage = () => {
     const navigate = useNavigate();
     const theme = useTheme();
 
-    const onSubmit = async (fields: SignInFormFields) => {
+    const onSubmit = async (fields: SignInFormFields, redirect: string | null) => {
         const error = await signIn(fields);
         if (error) {
             showError(error);
         } else {
             const user = await refreshUser();
             if (user) {
-                navigate('/');
+                if (redirect) {
+                    navigate(redirect);
+                } else {
+                    navigate('/');
+                }
             } else {
                 showError('Error during signing in');
             }
